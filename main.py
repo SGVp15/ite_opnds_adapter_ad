@@ -32,8 +32,8 @@ def get_members_in_group(group) -> str:
         # Выводим стандартный вывод команды
         ldap_output = result.stdout
 
-        log.error('STDOUT ldapsearch:')
-        log.error(ldap_output)
+        # log.info('STDOUT ldapsearch:')
+        # log.info(ldap_output)
 
         return ldap_output
         # Если есть ошибки, они будут в result.stderr (если check=False)
@@ -43,12 +43,11 @@ def get_members_in_group(group) -> str:
         # Теперь вы можете парсить ldap_output
         # ldapsearch выводит данные в формате LDIF. Вам нужно будет разобрать этот текст.
         # Пример простого парсинга для email и displayName
-
     except subprocess.CalledProcessError as e:
         log.error(f'Ошибка выполнения ldapsearch: {e}')
-        log.error(f'Код выхода: {e.returncode}')
-        log.error(f'STDOUT: {e.stdout}')
-        log.error(f'STDERR: {e.stderr}')
+        log.error(f'Код выхода: {result.returncode}')
+        log.error(f'STDOUT: {result.stdout}')
+        log.error(f'STDERR: {result.stderr}')
     except FileNotFoundError:
         log.error('Ошибка: Команда ldapsearch не найдена.')
     except Exception as e:
@@ -76,7 +75,7 @@ def get_users_from_ad(dc: str) -> str:
         '-b', dc,
         # f'(&(objectClass=user)(memberOf=CN={group},OU=Confluence,{domain}))',
         # 'members'
-        # 'objectSid', 'mail', 'displayName', 'description', 'info', 'givenName', 'sn', 'sAMAccountName'
+        *CSV_HEADERS
     ]
     try:
         # Запускаем команду и захватываем её вывод
@@ -89,8 +88,8 @@ def get_users_from_ad(dc: str) -> str:
         # Выводим стандартный вывод команды
         ldap_output = result.stdout
 
-        log.error('STDOUT ldapsearch:')
-        log.error(ldap_output)
+        # log.info('STDOUT ldapsearch:')
+        # log.info(ldap_output)
 
         return ldap_output
         # Если есть ошибки, они будут в result.stderr (если check=False)
@@ -103,9 +102,9 @@ def get_users_from_ad(dc: str) -> str:
 
     except subprocess.CalledProcessError as e:
         log.error(f'Ошибка выполнения ldapsearch: {e}')
-        log.error(f'Код выхода: {e.returncode}')
-        log.error(f'STDOUT: {e.stdout}')
-        log.error(f'STDERR: {e.stderr}')
+        log.error(f'Код выхода: {result.returncode}')
+        log.error(f'STDOUT: {result.stdout}')
+        log.error(f'STDERR: {result.stderr}')
     except FileNotFoundError:
         log.error('Ошибка: Команда ldapsearch не найдена.')
     except Exception as e:
