@@ -17,10 +17,11 @@ GROUPS = {
 }
 
 CSV_HEADERS = [
-    'objectSid', 'sn', 'sAMAccountName', 'mail', 'displayName', 'givenName',
-    'description', 'info', 'dn', 'phone'
+    'objectSid', 'name', 'sn', 'sAMAccountName', 'mail', 'displayName', 'givenName',
+    'description', 'info', 'dn', 'phone', 'homePhone', 'pager', 'mobile', 'description',
+    'department', 'telephoneNumber', 'ipPhone',
 ]
 
 LOG_FILE = 'log.txt'
 DIR_OUT = './out'
-os.makedirs(DIR_OUT,exist_ok=True)
+os.makedirs(DIR_OUT, exist_ok=True)

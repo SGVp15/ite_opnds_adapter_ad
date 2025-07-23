@@ -65,15 +65,15 @@ def save_users(users_data: list[dict], csv_filename: str = 'ldap_users.csv'):
             writer.writerow(row)
 
 
-def get_users_from_ad(DC: str) -> str:
+def get_users_from_ad(dc: str) -> str:
     command_get_members_sid = [
         'ldapsearch',
         '-x',
-        '-H', f'ldap://{get_domain_from_group(DC)}',
+        '-H', f'ldap://{get_domain_from_group(dc)}',
         '-D', f'{AD_LOGIN}',
         '-w', f'{AD_PASSWORD}',
         # ЭТО МОЖЕТ БЫТЬ ОШИБКОЙ !!!
-        '-b', DC,
+        '-b', dc,
         # f'(&(objectClass=user)(memberOf=CN={group},OU=Confluence,{domain}))',
         # 'members'
         # 'objectSid', 'mail', 'displayName', 'description', 'info', 'givenName', 'sn', 'sAMAccountName'
