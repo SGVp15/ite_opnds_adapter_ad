@@ -19,9 +19,10 @@ GROUPS = {
 CSV_HEADERS = [
     'objectSid', 'name', 'sn', 'sAMAccountName', 'mail', 'displayName', 'givenName',
     'description', 'info', 'dn', 'phone', 'homePhone', 'pager', 'mobile', 'description',
-    'department', 'telephoneNumber', 'ipPhone',
+    'department', 'telephoneNumber', 'ipPhone', 'otherTelephone'
 ]
 
 LOG_FILE = 'log.txt'
 DIR_OUT = './out'
+
 os.makedirs(DIR_OUT, exist_ok=True)

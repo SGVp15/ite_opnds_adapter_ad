@@ -56,7 +56,7 @@ def get_members_in_group(group) -> str:
         return ''
 
 
-def save_users(users_data: list[dict], csv_filename: str = 'ldap_users.csv'):
+def save_users_csv(users_data: list[dict], csv_filename: str = 'ldap_users.csv'):
     with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS)
         writer.writeheader()
@@ -119,8 +119,9 @@ def main():
         users = []
         for m in members:
             users.append(parser_users(get_users_from_ad(m)))
-        save_users(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
-        log.info(f'Обработка группы завершена: [{file_name}]')
+        save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
+        log.info(f'Обработка группы завершена: [{file_name}]. '
+                 f'Обработано {len(users)} записей')
 
 
 if __name__ == '__main__':

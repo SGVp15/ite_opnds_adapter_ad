@@ -3,7 +3,7 @@ import re
 from unittest import TestCase
 
 from config import DIR_OUT
-from main import save_users
+from main import save_users_csv
 from parser import parser_users
 
 
@@ -19,4 +19,4 @@ class Test(TestCase):
             with open('./input_test/out_user.txt', 'r', encoding='utf-8') as f:
                 s = f.read()
             users = parser_users(s)
-            save_users(users_data=users, csv_filename=str(os.path.join(DIR_OUT, 'out_user.txt')))
+            save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, 'out_user.txt')))
