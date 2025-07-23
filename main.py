@@ -1,12 +1,13 @@
 import csv
+import os.path
 import subprocess
 
-from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS
+from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT
 from log_ import log
 from parser import get_domain_from_group, parser_users
 
 
-def get_members_in_group(group):
+def get_members_in_group(group) -> str:
     command_get_members_sid = [
         'ldapsearch',
         '-x',
@@ -52,6 +53,7 @@ def get_members_in_group(group):
         log.error('Ошибка: Команда ldapsearch не найдена.')
     except Exception as e:
         log.error(f'Произошла непредвиденная ошибка: {e}')
+        return ''
 
 
 def save_users(users_data: list[dict], csv_filename: str = 'ldap_users.csv'):
@@ -111,14 +113,14 @@ def get_users_from_ad(DC: str) -> str:
 
 
 def main():
-    for file_name, group_ad in GROUPS:
-        log.info(f'Обработка группы: {group_ad}')
+    for file_name, group_ad in GROUPS.items():
+        log.info(f'Обработка группы: [{file_name}]')
         members = parser_users(get_members_in_group(group_ad))
         users = []
         for m in members:
             users.append(parser_users(get_users_from_ad(m)))
-        save_users(users_data=users, csv_filename=file_name)
-        log.info(f'Обработка группы: {group_ad}')
+        save_users(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
+        log.info(f'Обработка группы завершена: [{file_name}]')
 
 
 if __name__ == '__main__':

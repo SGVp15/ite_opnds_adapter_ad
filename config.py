@@ -1,8 +1,10 @@
+import os
+
 AD_LOGIN = ''
 AD_PASSWORD = ''
 
 GROUPS = {
-    'administrator.csv': '',
+    'administrator.csv': 'CN=SupportPortalUsers,OU=Support,DC=ITExpert,DC=ru,DC=local',
     'administrator_ib.csv': '',
     'kontroler_ekspluatacii.csv': '',
     'operator_obmena.csv': '',
@@ -20,3 +22,5 @@ CSV_HEADERS = [
 ]
 
 LOG_FILE = 'log.txt'
+DIR_OUT = './out'
+os.makedirs(DIR_OUT,exist_ok=True)

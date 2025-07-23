@@ -16,6 +16,7 @@ def get_domain_from_group(input_str: str, count=3) -> str:
 
 
 def parser_users(ldap_output) -> []:
+    ldap_output=f'{ldap_output}'
     ldap_output = re.sub('\n ', '', ldap_output)
     ldap_output = re.sub(':{2} ', ': ', ldap_output)
 
