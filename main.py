@@ -37,7 +37,7 @@ def run_ldapsearch(command):
         # text=True - декодирует stdout и stderr как текст (UTF-8 по умолчанию)
         # check=True - вызывает CalledProcessError, если команда возвращает ненулевой код выхода
         # result = subprocess.run(command, capture_output=True, text=True, check=True)
-        result = subprocess.run(command, text=True, capture_output=True)
+        result = subprocess.run(command, text=True, capture_output=True, encoding='utf-8')
 
         # Выводим стандартный вывод команды
         ldap_output = result.stdout
@@ -55,6 +55,7 @@ def run_ldapsearch(command):
         log.error('Ошибка: Команда ldapsearch не найдена.')
     except Exception as e:
         log.error(f'Произошла непредвиденная ошибка: {e}')
+
 
 def get_users_from_ad(dc: str) -> str:
     command_get_user = [
