@@ -103,10 +103,10 @@ def get_users_from_ad(dc: str) -> str:
 def main():
     for file_name, group_ad in GROUPS.items():
         log.info(f'Обработка группы: [{file_name}]')
-        members = parser_users(get_members_in_group(group_ad))
+        members_users_ad_group = parser_users(get_members_in_group(group_ad))
         users = []
-        for m in members:
-            users.append(parser_users(get_users_from_ad(m)))
+        for member_user_ad in members_users_ad_group:
+            users.append(parser_users(get_users_from_ad(member_user_ad)))
         save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
         log.info(f'Обработка группы завершена: [{file_name}]. '
                  f'Обработано {len(users)} записей')
