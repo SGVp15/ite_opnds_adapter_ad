@@ -16,10 +16,9 @@ def get_domain_from_group(input_str: str, count=3) -> str:
 
 
 def parser_users(ldap_output) -> []:
-    ldap_output=f'{ldap_output}'
+    ldap_output = f'{ldap_output}'
     ldap_output = re.sub('\n ', '', ldap_output)
     ldap_output = re.sub(':{2} ', ': ', ldap_output)
-
     users_data = []
     current_user = {}
     for line in ldap_output.splitlines():
@@ -40,7 +39,6 @@ def parser_users(ldap_output) -> []:
             if current_user and 'dn' in current_user.keys():  # Убедимся, что это конец записи
                 users_data.append(current_user)
             current_user = {}
-
     for user in users_data:
         for k, v in user.items():
             text_data = v
@@ -53,3 +51,26 @@ def parser_users(ldap_output) -> []:
                     pass
 
     return users_data
+
+
+def parser_members(ldap_output) -> []:
+    ldap_output = f'{ldap_output}'
+    ldap_output = re.sub('\n ', '', ldap_output)
+    ldap_output = re.sub(':{2} ', ': ', ldap_output)
+
+    users_data = []
+    for line in ldap_output.splitlines():
+        if line.startswith('member: '):
+            s = re.sub('member: ', '', line)
+            users_data.append(s)
+    members = []
+    for text_data in users_data:
+        dn_match = re.search(r'\s*([a-zA-Z0-9+/=\s]+)', text_data)
+        if dn_match:
+            encoded_dn = re.sub(r'[\s\n\t]', '', dn_match.group(1))
+            try:
+                members.append(base64.b64decode(encoded_dn).decode('utf-8'))
+            except (base64.binascii.Error, UnicodeDecodeError) as e:
+                members.append(text_data)
+
+    return members

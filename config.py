@@ -28,7 +28,7 @@ CSV_HEADERS = [
 ]
 
 # Разделитель в CSV
-DELIMITER_CSV=';'
+DELIMITER_CSV = ';'
 
 # Файл Логов
 LOG_FILE = 'log.txt'
