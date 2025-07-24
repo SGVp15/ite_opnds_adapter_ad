@@ -47,7 +47,7 @@ def parser_users(ldap_output) -> []:
                 encoded_dn = re.sub(r'[\s\n\t]', '', dn_match.group(1))
                 try:
                     user[k] = base64.b64decode(encoded_dn).decode('utf-8')
-                except (base64.binascii.Error, UnicodeDecodeError) as e:
+                except UnicodeDecodeError as e:
                     pass
 
     return users_data
@@ -70,7 +70,7 @@ def parser_members(ldap_output) -> []:
             encoded_dn = re.sub(r'[\s\n\t]', '', dn_match.group(1))
             try:
                 members.append(base64.b64decode(encoded_dn).decode('utf-8'))
-            except (base64.binascii.Error, UnicodeDecodeError) as e:
+            except UnicodeDecodeError as e:
                 members.append(text_data)
 
     return members
