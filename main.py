@@ -17,9 +17,7 @@ def get_members_in_group(group) -> str:
         # ЭТО МОЖЕТ БЫТЬ ОШИБКОЙ !!!
         '-b', f'{group}',
         f'(memberOf=CN={group})',
-        # f'(&(objectClass=user)(memberOf=CN={group},OU=Confluence,{domain}))',
         'members'
-        # 'objectSid', 'mail', 'displayName', 'description', 'info', 'givenName', 'sn', 'sAMAccountName'
     ]
     try:
         # Запускаем команду и захватываем её вывод
