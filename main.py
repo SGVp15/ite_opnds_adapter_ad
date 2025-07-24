@@ -40,9 +40,6 @@ def get_members_in_group(group) -> str:
         # log.error('STDERR ldapsearch:')
         # log.error(result.stderr)
 
-        # Теперь вы можете парсить ldap_output
-        # ldapsearch выводит данные в формате LDIF. Вам нужно будет разобрать этот текст.
-        # Пример простого парсинга для email и displayName
     except subprocess.CalledProcessError as e:
         log.error(f'Ошибка выполнения ldapsearch: {e}')
         log.error(f'Код выхода: {result.returncode}')
@@ -95,10 +92,6 @@ def get_users_from_ad(dc: str) -> str:
         # Если есть ошибки, они будут в result.stderr (если check=False)
         # log.error('STDERR ldapsearch:')
         # log.error(result.stderr)
-
-        # Теперь вы можете парсить ldap_output
-        # ldapsearch выводит данные в формате LDIF. Вам нужно будет разобрать этот текст.
-        # Пример простого парсинга для email и displayName
 
     except subprocess.CalledProcessError as e:
         log.error(f'Ошибка выполнения ldapsearch: {e}')
