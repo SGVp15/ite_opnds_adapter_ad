@@ -1,8 +1,10 @@
 import os
 
+# Логин и пароль для доступа в Active Directory
 AD_LOGIN = ''
 AD_PASSWORD = ''
 
+# Соотношение файлов для 1с с Группами Active Directory
 GROUPS = {
     'administrator.csv': 'CN=SupportPortalUsers,OU=Support,DC=ITExpert,DC=ru,DC=local',
     'administrator_ib.csv': '',
@@ -16,6 +18,7 @@ GROUPS = {
     'auditor.csv': '',
 }
 
+# Название полей пользователя в Active Directory
 CSV_HEADERS = [
     'objectSid', 'dn',
     'name', 'sn', 'sAMAccountName', 'displayName', 'givenName',
@@ -24,7 +27,10 @@ CSV_HEADERS = [
     'phone', 'homePhone', 'pager', 'mobile', 'telephoneNumber', 'ipPhone', 'otherTelephone'
 ]
 
+# Файл Логов
 LOG_FILE = 'log.txt'
+
+# Расположение папки для выгрузки файлов CSV
 DIR_OUT = './out'
 
 os.makedirs(DIR_OUT, exist_ok=True)
