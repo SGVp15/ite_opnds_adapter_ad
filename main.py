@@ -17,7 +17,7 @@ def save_users_csv(users_data, csv_filename: str = 'ldap_users.csv'):
 
 
 def get_members_in_group(group) -> str:
-    command_get_members_sid = [
+    command_get_members = [
         'ldapsearch',
         '-x',
         '-H', f'ldap://{get_domain_from_group(group)}',
@@ -27,20 +27,24 @@ def get_members_in_group(group) -> str:
         # f'(memberOf={group})',
         'member', 'dc',
     ]
+    return run_ldapsearch(command=command_get_members)
 
+
+def run_ldapsearch(command):
     try:
         # Запускаем команду и захватываем её вывод
         # capture_output=True - захватывает stdout и stderr
         # text=True - декодирует stdout и stderr как текст (UTF-8 по умолчанию)
         # check=True - вызывает CalledProcessError, если команда возвращает ненулевой код выхода
         # result = subprocess.run(command, capture_output=True, text=True, check=True)
-        result = subprocess.run(command_get_members_sid, text=True, capture_output=True)
+        result = subprocess.run(command, text=True, capture_output=True)
 
         # Выводим стандартный вывод команды
         ldap_output = result.stdout
 
         # log.info('STDOUT ldapsearch:')
         # log.info(ldap_output)
+
         return ldap_output
     except subprocess.CalledProcessError as e:
         log.error(f'Ошибка выполнения ldapsearch: {e}')
@@ -51,11 +55,9 @@ def get_members_in_group(group) -> str:
         log.error('Ошибка: Команда ldapsearch не найдена.')
     except Exception as e:
         log.error(f'Произошла непредвиденная ошибка: {e}')
-        return ''
-
 
 def get_users_from_ad(dc: str) -> str:
-    command_get_members_sid = [
+    command_get_user = [
         'ldapsearch',
         '-x',
         '-H', f'ldap://{get_domain_from_group(dc)}',
@@ -65,30 +67,7 @@ def get_users_from_ad(dc: str) -> str:
         # f'(&(objectClass=user)(memberOf=CN={group},OU=Confluence,{domain}))',
         *CSV_HEADERS
     ]
-    try:
-        # Запускаем команду и захватываем её вывод
-        # capture_output=True - захватывает stdout и stderr
-        # text=True - декодирует stdout и stderr как текст (UTF-8 по умолчанию)
-        # check=True - вызывает CalledProcessError, если команда возвращает ненулевой код выхода
-        # result = subprocess.run(command, capture_output=True, text=True, check=True)
-        result = subprocess.run(command_get_members_sid, text=True, capture_output=True)
-
-        # Выводим стандартный вывод команды
-        ldap_output = result.stdout
-
-        # log.info('STDOUT ldapsearch:')
-        # log.info(ldap_output)
-
-        return ldap_output
-    except subprocess.CalledProcessError as e:
-        log.error(f'Ошибка выполнения ldapsearch: {e}')
-        log.error(f'Код выхода: {result.returncode}')
-        log.error(f'STDOUT: {result.stdout}')
-        log.error(f'STDERR: {result.stderr}')
-    except FileNotFoundError:
-        log.error('Ошибка: Команда ldapsearch не найдена.')
-    except Exception as e:
-        log.error(f'Произошла непредвиденная ошибка: {e}')
+    return run_ldapsearch(command=command_get_user)
 
 
 def main():
