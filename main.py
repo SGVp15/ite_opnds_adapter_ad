@@ -2,7 +2,7 @@ import csv
 import os.path
 import subprocess
 
-from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT
+from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT, DELIMITER_CSV
 from log_ import log
 from parser import get_domain_from_group, parser_users
 
@@ -52,7 +52,7 @@ def get_members_in_group(group) -> str:
 
 def save_users_csv(users_data: list[dict], csv_filename: str = 'ldap_users.csv'):
     with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS, delimiter=';')
+        writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS, delimiter=DELIMITER_CSV)
         writer.writeheader()
         for user in users_data:
             row = {header: user.get(header, '') for header in CSV_HEADERS}

@@ -27,6 +27,9 @@ CSV_HEADERS = [
     'phone', 'homePhone', 'pager', 'mobile', 'telephoneNumber', 'ipPhone', 'otherTelephone'
 ]
 
+# Разделитель в CSV
+DELIMITER_CSV=';'
+
 # Файл Логов
 LOG_FILE = 'log.txt'
 
