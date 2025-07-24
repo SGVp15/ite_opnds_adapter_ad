@@ -17,7 +17,7 @@ def get_members_in_group(group) -> str:
         # ЭТО МОЖЕТ БЫТЬ ОШИБКОЙ !!!
         '-b', f'{group}',
         f'(memberOf=CN={group})',
-        'members'
+        'members',
     ]
     try:
         # Запускаем команду и захватываем её вывод
@@ -66,10 +66,8 @@ def get_users_from_ad(dc: str) -> str:
         '-H', f'ldap://{get_domain_from_group(dc)}',
         '-D', f'{AD_LOGIN}',
         '-w', f'{AD_PASSWORD}',
-        # ЭТО МОЖЕТ БЫТЬ ОШИБКОЙ !!!
         '-b', dc,
         # f'(&(objectClass=user)(memberOf=CN={group},OU=Confluence,{domain}))',
-        # 'members'
         *CSV_HEADERS
     ]
     try:

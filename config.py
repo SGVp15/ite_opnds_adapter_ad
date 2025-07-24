@@ -17,9 +17,11 @@ GROUPS = {
 }
 
 CSV_HEADERS = [
-    'objectSid', 'name', 'sn', 'sAMAccountName', 'mail', 'displayName', 'givenName',
-    'description', 'info', 'dn', 'phone', 'homePhone', 'pager', 'mobile', 'description',
-    'department', 'telephoneNumber', 'ipPhone', 'otherTelephone'
+    'objectSid', 'dn',
+    'name', 'sn', 'sAMAccountName', 'displayName', 'givenName',
+    'mail',
+    'description', 'info', 'description', 'department',
+    'phone', 'homePhone', 'pager', 'mobile', 'telephoneNumber', 'ipPhone', 'otherTelephone'
 ]
 
 LOG_FILE = 'log.txt'
