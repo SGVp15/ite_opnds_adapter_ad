@@ -2,7 +2,7 @@ import os.path
 import subprocess
 
 from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT, DEBUG
-from csv_ import save_users_csv
+from csv_ import save_users_csv, save_users_all_to_one_csv
 from log_ import log
 from parser import get_domain_from_group, parser_users, parser_members
 
@@ -63,6 +63,7 @@ def get_users_from_ad(dc: str) -> str:
 
 
 def main():
+    all_users = []
     for file_name, group_ad in GROUPS.items():
         log.info(f'Обработка группы: [{file_name}]')
         members_users_ad_group = parser_members(get_members_in_group(group_ad))
@@ -75,8 +76,12 @@ def main():
             except TypeError as e:
                 pass
 
+        for u in users:
+            u['role'] = file_name
+        all_users.extend(users)
         save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
         log.info(f'Обработка группы завершена: [{file_name}]. Обработано {len(users)} записей')
+    save_users_all_to_one_csv(all_users)
 
 
 if __name__ == '__main__':
