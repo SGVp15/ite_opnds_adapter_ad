@@ -79,8 +79,12 @@ def parser_members(ldap_output) -> []:
                 text_data = members.append(base64.b64decode(encoded_dn).decode('utf-8'))
             except (UnicodeDecodeError, binascii.Error) as e:
                 pass
-            text_data = re.sub(r'[\r\n]+', ' ', text_data)
-            members.append(text_data)
+            try:
+                text_data = re.sub(r'[\r\n]+', ' ', text_data)
+                members.append(text_data)
+            except TypeError as e:
+                if DEBUG:
+                    log.debug(f'text_data = [{text_data}]')
 
     if DEBUG:
         log.debug(members)

@@ -15,8 +15,11 @@ class Test(TestCase):
             o = parser_users(s)
             print(o)
 
+        file = './input_test/out_user.txt'
         for i in range(1):
-            with open('./input_test/out_user.txt', 'r', encoding='utf-8') as f:
+            with open(file, 'r', encoding='utf-8') as f:
                 s = f.read()
             users = parser_users(s)
-            save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, 'out_user.txt')))
+            for u in users:
+                u['role'] = file
+            save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, 'test_parser.txt')))

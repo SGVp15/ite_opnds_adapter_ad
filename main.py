@@ -77,7 +77,7 @@ def main():
                 pass
 
         for u in users:
-            u['role'] = file_name
+            u['role'] = f'{file_name}'
 
         all_users.extend(users)
 
