@@ -78,7 +78,9 @@ def main():
 
         for u in users:
             u['role'] = file_name
+
         all_users.extend(users)
+
         save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
         log.info(f'Обработка группы завершена: [{file_name}]. Обработано {len(users)} записей')
     save_users_all_to_one_csv(all_users)
