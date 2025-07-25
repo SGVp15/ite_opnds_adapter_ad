@@ -1,17 +1,21 @@
 import base64
+from log_ import log
 import re
+
+from config import DEBUG
+from log_ import log
 
 
 def get_domain_from_group(input_str: str, count=3) -> str:
     input_str = input_str.split(',')
-    s_l = []
+    name_list = []
     for w in input_str:
         s = re.sub(r'\w+\=', '', w)
         s = re.sub(r'\s+', '', s)
-        s_l.append(s)
-    if len(s_l) >= count > 0:
-        s_l = s_l[len(s_l) - count:]
-    out_str = '.'.join(s_l)
+        name_list.append(s)
+    if len(name_list) >= count > 0:
+        name_list = name_list[len(name_list) - count:]
+    out_str = '.'.join(name_list)
     return out_str
 
 
@@ -49,7 +53,8 @@ def parser_users(ldap_output) -> []:
                     user[k] = base64.b64decode(encoded_dn).decode('utf-8')
                 except UnicodeDecodeError as e:
                     pass
-
+    if DEBUG:
+        log.debug(users_data)
     return users_data
 
 
@@ -72,5 +77,6 @@ def parser_members(ldap_output) -> []:
                 members.append(base64.b64decode(encoded_dn).decode('utf-8'))
             except UnicodeDecodeError as e:
                 members.append(text_data)
-
+    if DEBUG:
+        log.debug(members)
     return members

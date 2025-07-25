@@ -3,7 +3,7 @@ import re
 from unittest import TestCase
 
 from config import DIR_OUT
-from main import save_users_csv
+from csv_ import save_users_csv
 from parser import parser_users
 
 

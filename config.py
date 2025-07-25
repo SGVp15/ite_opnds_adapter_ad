@@ -36,4 +36,5 @@ LOG_FILE = 'log.txt'
 # Расположение папки для выгрузки файлов CSV
 DIR_OUT = './out'
 
+DEBUG = False
 os.makedirs(DIR_OUT, exist_ok=True)

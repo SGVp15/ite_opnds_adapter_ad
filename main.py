@@ -1,19 +1,10 @@
-import csv
 import os.path
 import subprocess
 
-from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT, DELIMITER_CSV
+from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT, DEBUG
+from csv_ import save_users_csv
 from log_ import log
 from parser import get_domain_from_group, parser_users, parser_members
-
-
-def save_users_csv(users_data, csv_filename: str = 'ldap_users.csv'):
-    with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=CSV_HEADERS, delimiter=DELIMITER_CSV)
-        writer.writeheader()
-        for user in users_data:
-            row = {header: user.get(header, '') for header in CSV_HEADERS}
-            writer.writerow(row)
 
 
 def get_members_in_group(group) -> str:
@@ -39,13 +30,13 @@ def run_ldapsearch(command):
         # result = subprocess.run(command, capture_output=True, text=True, check=True)
         result = subprocess.run(command, text=True, capture_output=True, encoding='utf-8')
 
-        # Выводим стандартный вывод команды
         ldap_output = result.stdout
 
-        # log.info('STDOUT ldapsearch:')
-        # log.info(ldap_output)
+        if DEBUG:
+            log.debug('STDOUT ldapsearch:\n', ldap_output)
 
         return ldap_output
+
     except subprocess.CalledProcessError as e:
         log.error(f'Ошибка выполнения ldapsearch: {e}')
         log.error(f'Код выхода: {result.returncode}')
