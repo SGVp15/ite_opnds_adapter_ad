@@ -1,4 +1,5 @@
 import base64
+import binascii
 import re
 
 from config import DEBUG
@@ -50,7 +51,7 @@ def parser_users(ldap_output) -> []:
                 encoded_dn = re.sub(r'[\s\n\t]', '', dn_match.group(1))
                 try:
                     user[k] = base64.b64decode(encoded_dn).decode('utf-8')
-                except UnicodeDecodeError as e:
+                except (UnicodeDecodeError, binascii.Error) as e:
                     pass
     if DEBUG:
         log.debug(users_data)
@@ -74,7 +75,7 @@ def parser_members(ldap_output) -> []:
             encoded_dn = re.sub(r'[\s\n\t]', '', dn_match.group(1))
             try:
                 members.append(base64.b64decode(encoded_dn).decode('utf-8'))
-            except UnicodeDecodeError as e:
+            except (UnicodeDecodeError, binascii.Error) as e:
                 members.append(text_data)
     if DEBUG:
         log.debug(members)
