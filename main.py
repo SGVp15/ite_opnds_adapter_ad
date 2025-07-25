@@ -7,18 +7,18 @@ from log_ import log
 from parser import get_domain_from_group, parser_users, parser_members
 
 
-def get_members_in_group(group) -> str:
-    command_get_members = [
-        'ldapsearch',
-        '-x',
-        '-H', f'ldap://{get_domain_from_group(group)}',
-        '-D', f'{AD_LOGIN}',
-        '-w', f'{AD_PASSWORD}',
-        '-b', group,
-        # f'(memberOf={group})',
-        'member', 'dc',
-    ]
-    return run_ldapsearch(command=command_get_members)
+# def get_members_in_group(group) -> str:
+#     command_get_members = [
+#         'ldapsearch',
+#         '-x',
+#         '-H', f'ldap://{get_domain_from_group(group)}',
+#         '-D', f'{AD_LOGIN}',
+#         '-w', f'{AD_PASSWORD}',
+#         '-b', group,
+#         # f'(memberOf={group})',
+#         'member', 'dc',
+#     ]
+#     return run_ldapsearch(command=command_get_members)
 
 
 def run_ldapsearch(command):
@@ -55,8 +55,8 @@ def get_users_from_ad(dc: str) -> str:
         '-H', f'ldap://{get_domain_from_group(dc)}',
         '-D', f'{AD_LOGIN}',
         '-w', f'{AD_PASSWORD}',
-        '-b', dc,
-        # f'(&(objectClass=user)(memberOf={group}))',
+        '-b', {get_domain_from_group(dc, 2)},
+        f'(&(objectClass=user)(memberOf={dc}))',
         *CSV_HEADERS
     ]
     return run_ldapsearch(command=command_get_user)
@@ -66,15 +66,16 @@ def main():
     all_users = []
     for file_name, group_ad in GROUPS.items():
         log.info(f'Обработка группы: [{file_name}]')
-        members_users_ad_group = parser_members(get_members_in_group(group_ad))
+        # members_users_ad_group = parser_members(get_members_in_group(group_ad))
 
-        users = []
-        for member_user_ad in members_users_ad_group:
-            r = get_users_from_ad(member_user_ad)
-            try:
-                users.append(*parser_users(r))
-            except TypeError as e:
-                pass
+        # users = []
+        # for member_user_ad in members_users_ad_group:
+        # r = get_users_from_ad(member_user_ad)
+        users = get_users_from_ad(group_ad)
+        # try:
+        #     users.append(*parser_users(r))
+        # except TypeError as e:
+        #     pass
 
         for u in users:
             u['role'] = f'{file_name}'
