@@ -1,5 +1,4 @@
 import base64
-from log_ import log
 import re
 
 from config import DEBUG
