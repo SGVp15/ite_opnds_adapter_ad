@@ -56,7 +56,7 @@ def get_users_from_ad(dc: str) -> str:
         '-D', f'{AD_LOGIN}',
         '-w', f'{AD_PASSWORD}',
         '-b', dc,
-        # f'(&(objectClass=user)(memberOf=CN={group},OU=Confluence,{domain}))',
+        # f'(&(objectClass=user)(memberOf={group}))',
         *CSV_HEADERS
     ]
     return run_ldapsearch(command=command_get_user)
