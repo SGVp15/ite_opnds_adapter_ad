@@ -66,19 +66,20 @@ def main():
     all_users = []
     for file_name, group_ad in GROUPS.items():
         log.info(f'Обработка группы: [{file_name}]')
-        members_users_ad_group = parser_members(get_members_in_group(group_ad))
+        # members_users_ad_group = parser_members(get_members_in_group(group_ad))
 
         users = []
-        for member_user_ad in members_users_ad_group:
-            r = get_users_from_ad(member_user_ad)
-            try:
-                users.append(*parser_users(r))
-            except TypeError as e:
-                pass
+        # for member_user_ad in members_users_ad_group:
+        r = get_users_from_ad(group_ad)
+        #     try:
+        users.append(*parser_users(r))
+            # except TypeError as e:
+            #     pass
 
-        for u in users:
-            u['role'] = f'{file_name}'
-
+        for user in users:
+            user['role'] = f'{file_name}'
+            if DEBUG:
+                log.debug(f'[ USER ]{user}')
         all_users.extend(users)
 
         save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
