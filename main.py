@@ -72,7 +72,7 @@ def main():
         # for member_user_ad in members_users_ad_group:
         r = get_users_from_ad(group_ad)
         #     try:
-        users.append(*parser_users(r))
+        users.extend(parser_users(r))
         # except TypeError as e:
         #     pass
 
