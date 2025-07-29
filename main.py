@@ -35,13 +35,15 @@ def run_ldapsearch(command):
 
 
 def get_users_from_ad(domain: str, dc: str) -> str:
+    main_domain = 'cbr.ru'
     command_get_user = [
         'ldapsearch',
         '-x',
-        '-H', f'ldap://{domain}',
+        '-H', f'ldap://{domain}.{main_domain}',
         '-D', f'{AD_LOGIN}',
         '-w', f'{AD_PASSWORD}',
         '-b', f'{get_domain_from_group(dc)}',
+        '-E', 'pr=1000/noprompt',
         f'(&(objectClass=user)(memberOf={dc}))',
         *CSV_HEADERS
     ]
@@ -50,8 +52,8 @@ def get_users_from_ad(domain: str, dc: str) -> str:
 
 def main():
     all_users = []
-    for file_name, group_ad in GROUPS.items():
-        log.info(f'Обработка группы: [{file_name}]')
+    for group_name, group_ad in GROUPS.items():
+        log.info(f'Обработка группы: [{group_name}]')
         group_users = []
         users = []
         for domain in DOMAINS:
@@ -65,12 +67,12 @@ def main():
             group_users.extend(users)
 
         for user in group_users:
-            user['role'] = f'{file_name}'
-        if DEBUG:
-            log.debug(f'[ USER ]{user}')
+            user['role'] = f'{group_name}'
+            if DEBUG:
+                log.debug(f'[ USER ]{user}')
         all_users.extend(group_users)
-        save_users_csv(users_data=all_users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
-        log.info(f'Обработка группы завершена: [{file_name}]. Обработано {len(users)} записей')
+        save_users_csv(users_data=group_users, csv_filename=str(os.path.join(DIR_OUT, group_name)))
+        log.info(f'Обработка группы завершена: [{group_name}]. Обработано {len(users)} записей')
     save_users_csv(all_users, csv_filename='all_users.csv')
 
 
