@@ -62,12 +62,12 @@ def main():
                 users = parser_users(r)
             except TypeError as e:
                 pass
-
-            for user in users:
-                user['role'] = f'{file_name}'
-                if DEBUG:
-                    log.debug(f'[ USER ]{user}')
             group_users.extend(users)
+
+        for user in group_users:
+            user['role'] = f'{file_name}'
+        if DEBUG:
+            log.debug(f'[ USER ]{user}')
         all_users.extend(group_users)
         save_users_csv(users_data=all_users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
         log.info(f'Обработка группы завершена: [{file_name}]. Обработано {len(users)} записей')
