@@ -5,7 +5,8 @@ from config import CSV_HEADERS, DELIMITER_CSV
 
 def save_users_csv(users_data, csv_filename: str = 'ldap_users.csv'):
     with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=CSV_HEADERS, delimiter=DELIMITER_CSV)
+        headers = ['role', *CSV_HEADERS]
+        writer = csv.DictWriter(f, fieldnames=headers, delimiter=DELIMITER_CSV)
         writer.writeheader()
         for user in users_data:
             row = {header: user.get(header, '') for header in CSV_HEADERS}
@@ -14,8 +15,9 @@ def save_users_csv(users_data, csv_filename: str = 'ldap_users.csv'):
 
 def save_users_all_to_one_csv(users_data, csv_filename: str = 'all_users.csv'):
     with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=['role', *CSV_HEADERS], delimiter=DELIMITER_CSV)
+        headers = ['role', *CSV_HEADERS]
+        writer = csv.DictWriter(f, fieldnames=headers, delimiter=DELIMITER_CSV)
         writer.writeheader()
         for user in users_data:
-            row = {header: user.get(header, '') for header in CSV_HEADERS}
+            row = {header: user.get(header, '') for header in headers}
             writer.writerow(row)

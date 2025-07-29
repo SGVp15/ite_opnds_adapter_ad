@@ -7,20 +7,6 @@ from log_ import log
 from parser import get_domain_from_group, parser_users, parser_members
 
 
-# def get_members_in_group(group) -> str:
-#     command_get_members = [
-#         'ldapsearch',
-#         '-x',
-#         '-H', f'ldap://{get_domain_from_group(group)}',
-#         '-D', f'{AD_LOGIN}',
-#         '-w', f'{AD_PASSWORD}',
-#         '-b', group,
-#         # f'(memberOf={group})',
-#         'member', 'dc',
-#     ]
-#     return run_ldapsearch(command=command_get_members)
-
-
 def run_ldapsearch(command):
     try:
         # Запускаем команду и захватываем её вывод
@@ -33,7 +19,7 @@ def run_ldapsearch(command):
         ldap_output = result.stdout
 
         if DEBUG:
-            log.debug('STDOUT ldapsearch:\n', ldap_output)
+            log.debug('[ STDOUT ldapsearch ]\n', ldap_output)
 
         return ldap_output
 
@@ -66,14 +52,13 @@ def main():
     all_users = []
     for file_name, group_ad in GROUPS.items():
         log.info(f'Обработка группы: [{file_name}]')
-        # members_users_ad_group = parser_members(get_members_in_group(group_ad))
 
         users = []
         r = get_users_from_ad(group_ad)
         if DEBUG:
             log.debug(f'[ get_users_from_ad ]\n{r}')
         try:
-            users=parser_users(r)
+            users = parser_users(r)
         except TypeError as e:
             pass
 
