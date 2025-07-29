@@ -7,18 +7,18 @@ from log_ import log
 from parser import get_domain_from_group, parser_users, parser_members
 
 
-def get_members_in_group(group) -> str:
-    command_get_members = [
-        'ldapsearch',
-        '-x',
-        '-H', f'ldap://{get_domain_from_group(group)}',
-        '-D', f'{AD_LOGIN}',
-        '-w', f'{AD_PASSWORD}',
-        '-b', group,
-        # f'(memberOf={group})',
-        'member', 'dc',
-    ]
-    return run_ldapsearch(command=command_get_members)
+# def get_members_in_group(group) -> str:
+#     command_get_members = [
+#         'ldapsearch',
+#         '-x',
+#         '-H', f'ldap://{get_domain_from_group(group)}',
+#         '-D', f'{AD_LOGIN}',
+#         '-w', f'{AD_PASSWORD}',
+#         '-b', group,
+#         # f'(memberOf={group})',
+#         'member', 'dc',
+#     ]
+#     return run_ldapsearch(command=command_get_members)
 
 
 def run_ldapsearch(command):
@@ -55,8 +55,8 @@ def get_users_from_ad(dc: str) -> str:
         '-H', f'ldap://{get_domain_from_group(dc)}',
         '-D', f'{AD_LOGIN}',
         '-w', f'{AD_PASSWORD}',
-        '-b', dc,
-        # f'(&(objectClass=user)(memberOf={group}))',
+        '-b', f'{get_domain_from_group(dc, 2)}',
+        f'(&(objectClass=user)(memberOf={dc}))',
         *CSV_HEADERS
     ]
     return run_ldapsearch(command=command_get_user)
@@ -73,8 +73,8 @@ def main():
         r = get_users_from_ad(group_ad)
         #     try:
         users.append(*parser_users(r))
-            # except TypeError as e:
-            #     pass
+        # except TypeError as e:
+        #     pass
 
         for user in users:
             user['role'] = f'{file_name}'
