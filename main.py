@@ -71,8 +71,10 @@ def main():
         users = []
         # for member_user_ad in members_users_ad_group:
         r = get_users_from_ad(group_ad)
+        if DEBUG:
+            log.debug(f'[ get_users_from_ad ]\n{r}')
         #     try:
-        users.extend(parser_users(r))
+        users=parser_users(r)
         # except TypeError as e:
         #     pass
 
