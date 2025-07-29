@@ -4,6 +4,12 @@ import os
 AD_LOGIN = ''
 AD_PASSWORD = ''
 
+DOMAINS = [
+    'vip.cbr.ru',
+    'region.cbr.ru',
+    'portal.cbr.ru'
+]
+
 # Соотношение файлов для 1с с Группами Active Directory
 GROUPS = {
     'administrator.csv': 'CN=SupportPortalUsers,OU=Support,DC=ITExpert,DC=ru,DC=local',

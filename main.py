@@ -1,7 +1,7 @@
 import os.path
 import subprocess
 
-from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT, DEBUG
+from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT, DEBUG, DOMAINS
 from csv_ import save_users_csv
 from log_ import log
 from parser import get_domain_from_group, parser_users
@@ -34,14 +34,14 @@ def run_ldapsearch(command):
         log.error(f'Произошла непредвиденная ошибка: {e}')
 
 
-def get_users_from_ad(dc: str) -> str:
+def get_users_from_ad(domain: str, dc: str) -> str:
     command_get_user = [
         'ldapsearch',
         '-x',
-        '-H', f'ldap://{get_domain_from_group(dc)}',
+        '-H', f'ldap://{domain}',
         '-D', f'{AD_LOGIN}',
         '-w', f'{AD_PASSWORD}',
-        '-b', f'{get_domain_from_group(dc, 2)}',
+        '-b', f'{get_domain_from_group(dc)}',
         f'(&(objectClass=user)(memberOf={dc}))',
         *CSV_HEADERS
     ]
@@ -52,23 +52,24 @@ def main():
     all_users = []
     for file_name, group_ad in GROUPS.items():
         log.info(f'Обработка группы: [{file_name}]')
-
+        group_users = []
         users = []
-        r = get_users_from_ad(group_ad)
-        if DEBUG:
-            log.debug(f'[ get_users_from_ad ]\n{r}')
-        try:
-            users = parser_users(r)
-        except TypeError as e:
-            pass
-
-        for user in users:
-            user['role'] = f'{file_name}'
+        for domain in DOMAINS:
+            r = get_users_from_ad(domain=domain, dc=group_ad)
             if DEBUG:
-                log.debug(f'[ USER ]{user}')
-        all_users.extend(users)
+                log.debug(f'[ get_users_from_ad ]\n{r}')
+            try:
+                users = parser_users(r)
+            except TypeError as e:
+                pass
 
-        save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
+            for user in users:
+                user['role'] = f'{file_name}'
+                if DEBUG:
+                    log.debug(f'[ USER ]{user}')
+            group_users.extend(users)
+        all_users.extend(group_users)
+        save_users_csv(users_data=all_users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
         log.info(f'Обработка группы завершена: [{file_name}]. Обработано {len(users)} записей')
     save_users_csv(all_users, csv_filename='all_users.csv')
 
