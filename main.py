@@ -70,7 +70,7 @@ def main():
 
         save_users_csv(users_data=users, csv_filename=str(os.path.join(DIR_OUT, file_name)))
         log.info(f'Обработка группы завершена: [{file_name}]. Обработано {len(users)} записей')
-    save_users_all_to_one_csv(all_users)
+    save_users_csv(all_users, csv_filename='all_users.csv')
 
 
 if __name__ == '__main__':

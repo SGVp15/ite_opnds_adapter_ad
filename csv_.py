@@ -11,13 +11,3 @@ def save_users_csv(users_data, csv_filename: str = 'ldap_users.csv'):
         for user in users_data:
             row = {header: user.get(header, '') for header in CSV_HEADERS}
             writer.writerow(row)
-
-
-def save_users_all_to_one_csv(users_data, csv_filename: str = 'all_users.csv'):
-    with open(csv_filename, 'w', newline='', encoding='utf-8') as f:
-        headers = ['role', *CSV_HEADERS]
-        writer = csv.DictWriter(f, fieldnames=headers, delimiter=DELIMITER_CSV)
-        writer.writeheader()
-        for user in users_data:
-            row = {header: user.get(header, '') for header in headers}
-            writer.writerow(row)
