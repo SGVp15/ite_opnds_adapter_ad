@@ -1,2 +1,4 @@
 /out/
 /input_test/
+.venv
+.idea
