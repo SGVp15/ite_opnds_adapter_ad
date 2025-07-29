@@ -2,7 +2,7 @@ import os.path
 import subprocess
 
 from config import AD_LOGIN, AD_PASSWORD, GROUPS, CSV_HEADERS, DIR_OUT, DEBUG
-from csv_ import save_users_csv, save_users_all_to_one_csv
+from csv_ import save_users_csv
 from log_ import log
 from parser import get_domain_from_group, parser_users, parser_members
 
